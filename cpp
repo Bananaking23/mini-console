@@ -44,6 +44,16 @@ void centerText(String text, int y) {
   dis.print(text);
 }
 
+int detectPress(int numberOfButtons){
+  for(int i = 0; i < numberOfButtons; i++){
+    if(digitalRead(i) == LOW){
+      return i;
+    }
+  }
+  return -1;
+}
+
+
 void setup() {
   Wire.begin();
 
@@ -52,7 +62,7 @@ void setup() {
   }
 
   dis.clearDisplay();
-  dis.setTextSize(2);
+  dis.setTextSize(1);
   dis.setTextColor(SSD1306_WHITE);
   dis.setCursor(50, 30);
   dis.display();
@@ -67,13 +77,31 @@ void setup() {
 
 void loop() {
 
-  if(digitalRead(b1Pin) == LOW){
-    centerText("left",28);
-    dis.display();
-    dis.clearDisplay();
-    
-    shoot(bPin,10);
+  switch (detectPress(4)) {
+    case 0:
+      dis.fillRect(1, 0, 32, 64, SSD1306_WHITE);
+      break;
 
+    case 1:
+      dis.fillRect(32, 0, 32, 64, SSD1306_WHITE);
+      break;
+
+    case 2:
+      dis.fillRect(64, 0, 32, 64, SSD1306_WHITE);
+      break;
+
+    case 3:
+      dis.fillRect(96, 0, 32, 64, SSD1306_WHITE);
+      break;
+
+    case -1:
+      dis.clearDisplay();
+      dis.drawRect(1, 0, 32, 64, SSD1306_WHITE);
+      dis.drawRect(32, 0, 32, 64, SSD1306_WHITE);
+      dis.drawRect(64, 0, 32, 64, SSD1306_WHITE);
+      dis.drawRect(96, 0, 32, 64, SSD1306_WHITE);
+      break;
   }
+
   dis.display();
 }
